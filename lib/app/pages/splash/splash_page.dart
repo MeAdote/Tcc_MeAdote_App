@@ -42,7 +42,7 @@ class Splash extends StatelessWidget {
                   Container(
                     width: constraints.maxWidth * 0.9,
                     child: Text(
-                      'Compreendemos que o processo de adoção de um animal, muitas vezes não resulta como o esperado, como um animal que não está em condições para ser adotado ou um tutor que não apresenta estrutura para tal. <3',
+                      'Compreendemos que o processo de adoção de um animal, muitas vezes não resulta como o esperado, como um animal que não está em condições para ser adotado ou um tutor que não apresenta estrutura para tal.',
                       style: TextStyle(fontSize: 13.3),
                     ),
                   ),
