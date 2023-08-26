@@ -26,6 +26,7 @@ class _HomePageState extends State<HomePage> {
                       Container(
                         width: 45,
                         height: 45,
+                        decoration: BoxDecoration(),
                         child: Align(
                           alignment: Alignment.topRight,
                           child: IconButton(
@@ -40,11 +41,15 @@ class _HomePageState extends State<HomePage> {
                   Container(
                     width: 45,
                     height: 45,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(100),
+                        color: Colors.blue),
+                    alignment: Alignment.topRight,
                     child: Align(
-                      alignment: Alignment.topRight,
+                      alignment: Alignment.topCenter,
                       child: IconButton(
                         icon: Icon(Icons.person),
-                        color: Colors.blue,
+                        color: Colors.white,
                         onPressed: (() {
                           Navigator.push(
                             context,
