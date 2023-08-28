@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:tcc_me_adote/app/models/create_user.dart';
 
 class Cadaster extends StatefulWidget {
   @override
@@ -13,6 +14,7 @@ class _Cadaster extends State<Cadaster> {
   PageController _pageController = PageController();
   int _currentPage = 0;
   DateTime? _selectedDate;
+  late CreateUser createUser;
 
   static const titleName = [
     'Informações Pessoais',
@@ -75,84 +77,91 @@ class _Cadaster extends State<Cadaster> {
 
   Widget buildPersonalInfoPage() {
     return Container(
-        padding: const EdgeInsets.all(30.0),
+        padding: EdgeInsets.all(50.0),
         height: MediaQuery.of(context).size.height,
         child: SingleChildScrollView(
-          child: Column(
+          child: Column(children: [
+            Text(titleName[0]),
+            const SizedBox(
+              height: 100.0,
+            ),
+            Stack(
               children: [
-                Text(titleName[0]),
-                SizedBox(height: 100.0,),
-                Stack(
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(
-                            15.0), // Ajuste o valor para controlar a arredondamento
-                        color: Colors.blue, // Cor de fundo do botão
-                      ),
-                      child: ElevatedButton.icon(
-                        onPressed: () => _pickImage(),
-                        icon: const Icon(Icons.person),
-                        label: const Text('Selecione sua foto'),
-                        style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(
-                                15.0), // Ajuste o mesmo valor usado acima
-                          ),
-                        ),
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15.0),
+                    color: Colors.blue,
+                  ),
+                  child: ElevatedButton.icon(
+                    onPressed: () => _pickImage(),
+                    icon: const Icon(Icons.person),
+                    label: const Text('Selecione sua foto'),
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15.0),
                       ),
                     ),
-                    if (_pickedImage != null)
-                      ClipOval(
-                        child: Image.file(
-                          _pickedImage!,
-                          height: 100,
-                          width: 100,
-                          fit: BoxFit.cover,
-                        ),
-                      )
-                  ],
+                  ),
                 ),
-                const SizedBox(
-                  height: 20.0,
-                ),
-                const TextField(
-                  decoration: InputDecoration(labelText: 'Nome'),
-                ),
-                const SizedBox(
-                  height: 20.0,
-                ),
-                const TextField(
-                  decoration: InputDecoration(labelText: 'SobreNome'),
-                  
-                ),
-                const SizedBox(
-                  height: 20.0,
-                ),
-                ElevatedButton.icon(
-                    onPressed: () => _selectDate(context),
-                    icon: const Icon(Icons.calendar_today),
-                    label: const Text('Data de nascimento')),
-                if (_selectedDate != null)
-                  Text(
-                      '${_selectedDate!.day}/${_selectedDate!.month}/${_selectedDate!.year}'),
-                const SizedBox(
-                  height: 20.0,
-                ),
-                const TextField(
-                  decoration: InputDecoration(labelText: 'Telefone'),
-                ),
-                const SizedBox(
-                  height: 10.0,
-                ),
-                Container(
-                    alignment: Alignment.centerRight,
-                    child: ElevatedButton(
-                        onPressed: () => _pageController.nextPage(
-                            duration: const Duration(milliseconds: 300),
-                            curve: Curves.easeInOut),
-                        child: const Text('Próxima Página')))
-              ]),
+                if (_pickedImage != null)
+                  ClipOval(
+                    child: Image.file(
+                      _pickedImage!,
+                      height: 100,
+                      width: 100,
+                      fit: BoxFit.cover,
+                    ),
+                  )
+              ],
+            ),
+            const SizedBox(
+              height: 20.0,
+            ),
+            TextField(
+              decoration: const InputDecoration(
+                labelText: 'Nome',
+              ),
+              controller:
+                  TextEditingController(text: createUser.user?.firstName),
+              onChanged: (value) => createUser.user?.firstName = value,
+            ),
+            const SizedBox(height: 20.0),
+            TextField(
+              decoration: const InputDecoration(labelText: 'Sobrenome'),
+              controller:
+                  TextEditingController(text: createUser.user?.lastName),
+              onChanged: (value) => createUser.user?.lastName = value,
+            ),
+            const SizedBox(
+              height: 20.0,
+            ),
+            ElevatedButton.icon(
+                onPressed: () => _selectDate(context),
+                icon: const Icon(Icons.calendar_today),
+                label: const Text('Data de nascimento')),
+            if (_selectedDate != null)
+              Text(
+                  '${_selectedDate!.day}/${_selectedDate!.month}/${_selectedDate!.year}'),
+            const SizedBox(
+              height: 20.0,
+            ),
+            TextField(
+              decoration: const InputDecoration(labelText: 'Telefone'),
+              controller:
+                  TextEditingController(text: createUser.user?.telephone),
+              onChanged: (value) => createUser.user?.telephone = value,
+            ),
+            const SizedBox(
+              height: 10.0,
+            ),
+            Container(
+                alignment: Alignment.centerRight,
+                child: ElevatedButton(
+                    onPressed: () => _pageController.nextPage(
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeInOut),
+                    child: const Text('Próxima Página')))
+          ]),
         ));
   }
 
@@ -167,7 +176,11 @@ class _Cadaster extends State<Cadaster> {
             children: [
               Expanded(
                 child: TextField(
-                  decoration: InputDecoration(labelText: 'CEP'),
+                  decoration: const InputDecoration(labelText: 'CEP'),
+                  controller: TextEditingController(
+                      text: createUser.userAdress?.postalCode),
+                  onChanged: (value) =>
+                      createUser.userAdress?.postalCode = value,
                   keyboardType: TextInputType.number,
                   inputFormatters: <TextInputFormatter>[
                     FilteringTextInputFormatter.digitsOnly,
@@ -180,19 +193,25 @@ class _Cadaster extends State<Cadaster> {
                 onPressed: () {
                   // Lógica para quando o botão for pressionado
                 },
-                child: Text('Pesquisar Cep'),
+                child: const Text('Pesquisar Cep'),
               ),
             ],
           ),
-          const TextField(
-            decoration: InputDecoration(labelText: 'Estado'),
+          TextField(
+            decoration: const InputDecoration(
+              labelText: 'Estado',
+            ),
+            controller:
+                TextEditingController(text: createUser.userAdress?.state),
+            onChanged: (value) => createUser.userAdress?.state = value,
           ),
-          const TextField(decoration: InputDecoration(labelText: 'Cidade')),
-          const TextField(decoration: InputDecoration(labelText: 'Rua')),
-          const TextField(
-            decoration: InputDecoration(labelText: 'Número'),
-            style: TextStyle(fontSize: 20.0),
+          TextField(
+            decoration: const InputDecoration(labelText: 'Cidade'),
+            controller: 
+                TextEditingController(text: createUser.userAdress?.city),
           ),
+          TextField(decoration: const InputDecoration(labelText: 'Rua'),
+          controller: TextEditingController(text: createUser.userAdress?.streetName),),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -217,19 +236,21 @@ class _Cadaster extends State<Cadaster> {
   }
 
   Widget buildLoginInfoPage() {
-    return Center(
+    return Container(
+      padding: const EdgeInsets.all(50.0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(titleName[2]),
-          const TextField(
-            decoration: InputDecoration(labelText: 'Email'),
+          TextField(
+            decoration: const InputDecoration(labelText: 'Email'),
+            controller: TextEditingController(text: createUser.userLogin?.email),
+            onChanged: (value) => createUser.userLogin?.email = value,
           ),
-          const TextField(
+          TextField(
             decoration: InputDecoration(labelText: 'Senha'),
-          ),
-          const TextField(
-            decoration: InputDecoration(labelText: 'Confirmar Senha'),
+            controller: TextEditingController(text: createUser.userLogin?.password),
+            onChanged: (value) => createUser.userLogin?.password = value,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
