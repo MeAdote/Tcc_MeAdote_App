@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tcc_me_adote/app/pages/splash/splash_page.dart';
+import 'assets/colors/colors.dart';
+import 'assets/widgets/bigText.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -23,7 +25,11 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   Column(
                     children: [
-                      Text("Encontre seu Pet"),
+                      BigText(
+                        text: "Encontre seu pet",
+                        color: HomeColors.tituloColor,
+                        size: 30,
+                      ),
                       Text("Em qualquer lugar")
                     ],
                   ),
@@ -33,11 +39,11 @@ class _HomePageState extends State<HomePage> {
                       height: 45,
                       child: Icon(
                         Icons.person,
-                        color: Colors.grey,
+                        color: HomeColors.whiteColor,
                       ),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(15),
-                          color: Colors.blueAccent),
+                          color: HomeColors.blueColor),
                     ),
                   )
                 ],
