@@ -2,9 +2,12 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:tcc_me_adote/app/pages/cadaster/cadaster_adress_page.dart';
 import 'package:tcc_me_adote/app/pages/cadaster/cadaster_controller.dart';
 import 'package:tcc_me_adote/app/pages/cadaster/cadaster_page.dart';
+import 'package:tcc_me_adote/app/ui/styles/colors_app.dart';
+import 'package:validatorless/validatorless.dart';
 
 import '../../models/create_user.dart';
 
@@ -18,7 +21,7 @@ class PersonalInfoPage extends StatefulWidget {
 }
 
 class _PersonalInfoPageState extends State<PersonalInfoPage> {
-  File? _pickedImage;
+  final _formKey = GlobalKey<FormState>();
 
   Future<void> _pickImage() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
@@ -27,96 +30,144 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
 
     if (result != null) {
       setState(() {
-        _pickedImage = File(result.files.single.path!);
+        CadasterController.profilePicture = File(result.files.single.path!);
       });
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        padding: const EdgeInsets.all(50.0),
-        height: MediaQuery.of(context).size.height,
+    return Scaffold(
+      body: Center(
         child: SingleChildScrollView(
-          child: Column(children: [
-            const Text('Informações Pessoais'),
-            const SizedBox(
-              height: 100.0,
-            ),
-            Stack(
-              children: [
-                Visibility(
-                  visible: _pickedImage ==
-                      null,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15.0),
-                      color: Colors.blue,
-                    ),
-                    child: ElevatedButton.icon(
-                      onPressed: () => _pickImage(),
-                      icon: const Icon(Icons.person),
-                      label: const Text('Selecione sua foto'),
-                      style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15.0),
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const Text(
+                    'Informações Pessoais',
+                    style: TextStyle(fontSize: 20),
+                  ),
+                  const SizedBox(
+                    height: 40.0,
+                  ),
+                  Stack(
+                    children: [
+                      Visibility(
+                        visible: CadasterController.profilePicture == null,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15.0),
+                            color: ColorsApp.i.primary,
+                          ),
+                          child: ElevatedButton.icon(
+                            onPressed: () => _pickImage(),
+                            icon: const Icon(Icons.person),
+                            label: const Text('Selecione sua foto'),
+                            style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15.0),
+                              ),
+                            ),
+                          ),
                         ),
+                      ),
+                      if (CadasterController.profilePicture != null)
+                        Column(
+                          children: [
+                            ClipOval(
+                              child: Image.file(
+                                CadasterController.profilePicture!,
+                                height: 120,
+                                width: 120,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 15,
+                            ),
+                            ElevatedButton(
+                                onPressed: () => {
+                                  _pickImage()
+                                },
+                                child: const Text('Trocar foto'))
+                          ],
+                        )
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 25.0,
+                  ),
+                  TextFormField(
+                    decoration: const InputDecoration(
+                      labelText: 'Nome',
+                    ),
+                    controller: CadasterController.firstName,
+                    validator: Validatorless.multiple(
+                        [Validatorless.required('Nome obrigatório')]),
+                  ),
+                  const SizedBox(
+                    height: 25.0,
+                  ),
+                  TextFormField(
+                      decoration: const InputDecoration(labelText: 'Sobrenome'),
+                      controller: CadasterController.lastName,
+                      validator: Validatorless.multiple([
+                        Validatorless.required('Sobrenome obrigatório')
+                      ]),
+                      ),
+                  const SizedBox(
+                    height: 25.0,
+                  ),
+                  TextFormField(
+                    decoration: const InputDecoration(labelText: 'Idade'),
+                    controller: CadasterController.age,
+                    keyboardType: TextInputType.number,
+                    validator: Validatorless.required('Idade é obrigatório'),
+                  ),
+                  const SizedBox(height: 25.0),
+                  TextFormField(
+                    decoration: const InputDecoration(labelText: 'Telefone'),
+                    keyboardType: TextInputType.number,
+                    validator: Validatorless.multiple([
+                      Validatorless.required('Telefone é Obrigatório'),
+                      Validatorless.min(10, "Número de telefone inválido")
+                    ]),
+                    controller: CadasterController.telephone,
+                  ),
+                  const SizedBox(height: 40.0,),
+                  Center(
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                              ColorsApp.i.primary),
+                        ),
+                        onPressed: () {
+                          final valid =
+                              _formKey.currentState?.validate() ?? false;
+                          if (valid) {
+                            widget._controller.nextPage(
+                              duration: const Duration(milliseconds: 300),
+                              curve: Curves.ease,
+                            );
+                          }
+                        },
+                        child: const Text('Próxima Página'),
                       ),
                     ),
                   ),
-                ),
-                // Imagem selecionada
-                if (_pickedImage != null)
-                  ClipOval(
-                    child: Image.file(
-                      _pickedImage!,
-                      height: 100,
-                      width: 100,
-                      fit: BoxFit.cover,
-                    ),
-                  )
-              ],
-            ),
-            const SizedBox(
-              height: 20.0,
-            ),
-            TextField(
-              decoration: const InputDecoration(
-                labelText: 'Nome',
+                ],
               ),
-              controller: CadasterController.firstName,
             ),
-            const SizedBox(height: 20.0),
-            TextField(
-                decoration: const InputDecoration(labelText: 'Sobrenome'),
-                controller: CadasterController.lastName),
-            const SizedBox(
-              height: 20.0,
-            ),
-            TextField(
-              decoration: const InputDecoration(labelText: 'Idade'),
-              controller: CadasterController.birthDate,
-            ),
-            const SizedBox(
-              height: 20.0,
-            ),
-            TextField(
-              decoration: const InputDecoration(labelText: 'Telefone'),
-              controller: CadasterController.telephone,
-            ),
-            const SizedBox(
-              height: 10.0,
-            ),
-            Container(
-                alignment: Alignment.centerRight,
-                child: ElevatedButton(
-                    onPressed: () => {
-                          widget._controller.nextPage(
-                              duration: const Duration(milliseconds: 300),
-                              curve: Curves.ease)
-                        },
-                    child: const Text('Próxima Página')))
-          ]),
-        ));
+          ),
+        ),
+      ),
+    );
   }
 }

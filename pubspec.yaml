@@ -38,6 +38,9 @@ dependencies:
   cached_network_image: ^3.2.3
   dio: ^5.3.2
   intl: ^0.18.1
+  firebase_core: ^2.15.1
+  firebase_storage: ^11.2.6
+  validatorless: ^1.2.3
 
 dev_dependencies:
   flutter_test:

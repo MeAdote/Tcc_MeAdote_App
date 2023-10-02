@@ -10,7 +10,7 @@ class PetListPage extends StatefulWidget {
 class _PetListPageState extends State<PetListPage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       body: Text('Alo'),
     );
   }

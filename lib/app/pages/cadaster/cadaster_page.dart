@@ -17,9 +17,13 @@ class Cadaster extends StatefulWidget {
 }
 
 class _Cadaster extends State<Cadaster> {
-  
-  final PageController _pageController = PageController();
+  @override
+  void dispose() {
+    CadasterController.profilePicture = null;
+    super.dispose();
+  }
 
+  final PageController _pageController = PageController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,9 +32,10 @@ class _Cadaster extends State<Cadaster> {
         children: [
           PageView(
             controller: _pageController,
+            physics: const NeverScrollableScrollPhysics(),
             onPageChanged: (page) {
               setState(() {
-              
+                
               });
             },
             children: [
