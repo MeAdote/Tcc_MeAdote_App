@@ -18,10 +18,7 @@ class CadasterController {
 
   static File? profilePicture = null;
 
-  // Use um construtor privado para evitar instâncias da classe
-
   CadasterController._();
-  // Dispose de todos os controladores quando não forem mais necessários
   static void disposeAll() {
     firstName.dispose();
     lastName.dispose();

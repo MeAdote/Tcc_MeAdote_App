@@ -13,7 +13,6 @@ import 'package:tcc_me_adote/app/pages/cadaster/cadaster_user_page.dart';
 class Cadaster extends StatefulWidget {
   @override
   _Cadaster createState() => _Cadaster();
-  
 }
 
 class _Cadaster extends State<Cadaster> {
