@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:tcc_me_adote/app/pages/homePage/assets/widgets/smallText.dart';
+import 'package:tcc_me_adote/app/pages/homePage/dog_page_body.dart';
 import 'package:tcc_me_adote/app/pages/splash/splash_page.dart';
 import 'assets/colors/colors.dart';
 import 'assets/widgets/bigText.dart';
@@ -28,28 +30,29 @@ class _HomePageState extends State<HomePage> {
                       BigText(
                         text: "Encontre seu pet",
                         color: HomeColors.tituloColor,
-                        size: 30,
+                        size: 15,
                       ),
-                      Text("Em qualquer lugar")
+                      SmallText(
+                        text: "Em qualquer lugar",
+                        color: HomeColors.subColor,
+                        size: 15,
+                      )
                     ],
                   ),
-                  Center(
-                    child: Container(
-                      width: 45,
-                      height: 45,
-                      child: Icon(
+                  const Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Icon(
                         Icons.person,
-                        color: HomeColors.whiteColor,
+                        color: const Color(0xff656565),
                       ),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                          color: HomeColors.blueColor),
-                    ),
+                    ],
                   )
                 ],
               ),
             ),
           ),
+          DogPageBody(),
         ],
       ),
     );
