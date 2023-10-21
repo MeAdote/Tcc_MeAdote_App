@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:tcc_me_adote/app/pages/homePage/assets/colors/colors.dart';
 import 'package:tcc_me_adote/app/pages/homePage/assets/widgets/bigText.dart';
+import 'package:tcc_me_adote/app/pages/homePage/assets/widgets/smallText.dart';
 
 class DogPageBody extends StatefulWidget {
   const DogPageBody({super.key});
@@ -34,12 +36,12 @@ class _DogPageBodyState extends State<DogPageBody> {
               color: index.isEven ? Color(0xFF69c5df) : Color(0xFF9294cc),
               image: DecorationImage(
                   fit: BoxFit.cover,
-                  image: AssetImage("assets/image/golden.png"))),
+                  image: AssetImage('assets/images/golden.png'))),
         ),
         Align(
           alignment: Alignment.bottomCenter,
           child: Container(
-            height: 140,
+            height: 120,
             margin: EdgeInsets.only(left: 30, right: 30, bottom: 15),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(30),
@@ -48,7 +50,35 @@ class _DogPageBodyState extends State<DogPageBody> {
             child: Container(
               padding: EdgeInsets.only(top: 10, left: 15, right: 15),
               child: Column(
-                children: [BigText(text: "")],
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  BigText(text: "Golden"),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    children: [
+                      Wrap(
+                        children: List.generate(5, (index) {
+                          return Icon(Icons.star,
+                              color: HomeColors.lightBlueColor, size: 15);
+                        }),
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      SmallText(text: "sei la"),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      SmallText(text: "aa"),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      SmallText(text: "bb"),
+                    ],
+                  )
+                ],
               ),
             ),
           ),
