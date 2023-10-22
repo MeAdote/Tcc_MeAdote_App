@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tcc_me_adote/app/pages/homePage/assets/colors/colors.dart';
 import 'package:tcc_me_adote/app/pages/homePage/assets/widgets/bigText.dart';
+import 'package:tcc_me_adote/app/pages/homePage/assets/widgets/iconAndText.dart';
 import 'package:tcc_me_adote/app/pages/homePage/assets/widgets/smallText.dart';
 
 class DogPageBody extends StatefulWidget {
@@ -15,7 +16,7 @@ class _DogPageBodyState extends State<DogPageBody> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.redAccent,
+      //color: Colors.redAccent,
       height: 320,
       child: PageView.builder(
           itemCount: 5,
@@ -82,7 +83,20 @@ class _DogPageBodyState extends State<DogPageBody> {
                     height: 20,
                   ),
                   Row(
-                    children: [],
+                    children: [
+                      IconAndTexWidget(
+                          icon: Icons.circle_sharp,
+                          text: "teste",
+                          iconColor: HomeColors.lightBlueColor),
+                      IconAndTexWidget(
+                          icon: Icons.location_on,
+                          text: "distancia",
+                          iconColor: HomeColors.tituloColor),
+                      IconAndTexWidget(
+                          icon: Icons.access_time_rounded,
+                          text: "teste",
+                          iconColor: HomeColors.subColor),
+                    ],
                   )
                 ],
               ),
