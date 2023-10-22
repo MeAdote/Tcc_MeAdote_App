@@ -29,7 +29,7 @@ class _HomePageState extends State<HomePage> {
                     children: [
                       BigText(
                         text: "Encontre seu pet",
-                        color: HomeColors.tituloColor,
+                        color: HomeColors.blueColor,
                         size: 15,
                       ),
                       SmallText(
@@ -39,14 +39,18 @@ class _HomePageState extends State<HomePage> {
                       )
                     ],
                   ),
-                  const Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Icon(
+                  Center(
+                    child: Container(
+                      width: 45,
+                      height: 45,
+                      child: Icon(
                         Icons.person,
-                        color: const Color(0xff656565),
+                        color: HomeColors.whiteColor,
                       ),
-                    ],
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          color: HomeColors.blueColor),
+                    ),
                   )
                 ],
               ),

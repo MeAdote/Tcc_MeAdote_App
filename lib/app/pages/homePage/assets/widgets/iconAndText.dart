@@ -20,7 +20,7 @@ class IconAndTexWidget extends StatelessWidget {
       children: [
         Icon(icon, color: iconColor),
         SizedBox(
-          width: 5,
+          width: 10,
         ),
         SmallText(
           text: text,
