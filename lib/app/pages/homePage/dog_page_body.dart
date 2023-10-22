@@ -48,7 +48,7 @@ class _DogPageBodyState extends State<DogPageBody> {
               color: Colors.white,
             ),
             child: Container(
-              padding: EdgeInsets.only(top: 10, left: 15, right: 15),
+              padding: EdgeInsets.only(top: 15, left: 15, right: 15),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -77,6 +77,12 @@ class _DogPageBodyState extends State<DogPageBody> {
                       ),
                       SmallText(text: "bb"),
                     ],
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Row(
+                    children: [],
                   )
                 ],
               ),
