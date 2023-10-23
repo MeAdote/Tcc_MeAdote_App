@@ -3,18 +3,16 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:tcc_me_adote/app/pages/cadaster/cadaster_adress_page.dart';
 import 'package:tcc_me_adote/app/pages/cadaster/cadaster_controller.dart';
 import 'package:tcc_me_adote/app/pages/cadaster/cadaster_page.dart';
 import 'package:tcc_me_adote/app/ui/styles/colors_app.dart';
 import 'package:validatorless/validatorless.dart';
-
-import '../../models/create_user.dart';
-
 class PersonalInfoPage extends StatefulWidget {
   final PageController _controller;
+  final CadasterController _textFieldController;
 
-  const PersonalInfoPage(this._controller, {Key? key}) : super(key: key);
+
+  const PersonalInfoPage(this._controller, this._textFieldController, {Key? key}) : super(key: key);
 
   @override
   State<PersonalInfoPage> createState() => _PersonalInfoPageState();
@@ -23,14 +21,16 @@ class PersonalInfoPage extends StatefulWidget {
 class _PersonalInfoPageState extends State<PersonalInfoPage> {
   final _formKey = GlobalKey<FormState>();
 
+  
+
   Future<void> _pickImage() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.image,
     );
 
-    if (result != null) {
+    if (result != null && result.files.isNotEmpty) {
       setState(() {
-        CadasterController.profilePicture = File(result.files.single.path!);
+        widget._textFieldController.profilePicture = File(result.files.single.path!);
       });
     }
   }
@@ -58,7 +58,7 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                   Stack(
                     children: [
                       Visibility(
-                        visible: CadasterController.profilePicture == null,
+                        visible: widget._textFieldController.profilePicture == null,
                         child: Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(15.0),
@@ -76,12 +76,12 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                           ),
                         ),
                       ),
-                      if (CadasterController.profilePicture != null)
+                      if (widget._textFieldController.profilePicture != null)
                         Column(
                           children: [
                             ClipOval(
                               child: Image.file(
-                                CadasterController.profilePicture!,
+                                widget._textFieldController.profilePicture!,
                                 height: 120,
                                 width: 120,
                                 fit: BoxFit.cover,
@@ -106,7 +106,7 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                     decoration: const InputDecoration(
                       labelText: 'Nome',
                     ),
-                    controller: CadasterController.firstName,
+                    controller: widget._textFieldController.firstName,
                     validator: Validatorless.multiple(
                         [Validatorless.required('Nome obrigatório')]),
                   ),
@@ -115,7 +115,7 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                   ),
                   TextFormField(
                       decoration: const InputDecoration(labelText: 'Sobrenome'),
-                      controller: CadasterController.lastName,
+                      controller: widget._textFieldController.lastName,
                       validator: Validatorless.multiple([
                         Validatorless.required('Sobrenome obrigatório')
                       ]),
@@ -125,7 +125,7 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                   ),
                   TextFormField(
                     decoration: const InputDecoration(labelText: 'Idade'),
-                    controller: CadasterController.age,
+                    controller: widget._textFieldController.age,
                     keyboardType: TextInputType.number,
                     validator: Validatorless.required('Idade é obrigatório'),
                   ),
@@ -137,7 +137,7 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                       Validatorless.required('Telefone é Obrigatório'),
                       Validatorless.min(10, "Número de telefone inválido")
                     ]),
-                    controller: CadasterController.telephone,
+                    controller: widget._textFieldController.telephone,
                   ),
                   const SizedBox(height: 40.0,),
                   Center(

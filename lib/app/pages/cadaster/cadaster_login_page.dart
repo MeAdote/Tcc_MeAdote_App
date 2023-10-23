@@ -1,9 +1,10 @@
 import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:tcc_me_adote/app/models/create_user.dart';
 import 'package:tcc_me_adote/app/pages/cadaster/cadaster_controller.dart';
+import 'package:tcc_me_adote/app/repositories/firebase_repository.dart';
 import 'package:tcc_me_adote/app/repositories/user_repository.dart';
 import 'package:validatorless/validatorless.dart';
 
@@ -11,8 +12,10 @@ import '../../ui/styles/colors_app.dart';
 
 class LoginInfoPage extends StatefulWidget {
   final PageController pageController;
+  final CadasterController _cadasterController;
 
-  const LoginInfoPage(this.pageController, {Key? key}) : super(key: key);
+  const LoginInfoPage(this.pageController, this._cadasterController, {Key? key})
+      : super(key: key);
 
   @override
   State<LoginInfoPage> createState() => _LoginInfoPageState();
@@ -20,34 +23,28 @@ class LoginInfoPage extends StatefulWidget {
 
 class _LoginInfoPageState extends State<LoginInfoPage> {
   final _formKey = GlobalKey<FormState>();
+  bool _isLoading = false;
 
-  Future<void> CadasterUser() async {
-    UserRepository _repository = UserRepository();
+  UserRepository repository = UserRepository();
+  FireBaseRepository fireBaseRepository = FireBaseRepository();
 
-    var urlImage =
-        await uploadImageToFirebase(CadasterController.profilePicture);
-    _repository.userCadaster(urlImage);
-  }
+  late List<String?> firebaseImage;
 
-  Future<String?> uploadImageToFirebase(File? imageFile) async {
+  //Imagem Referencia [0 - URL] [1 - Path]
+  final List<String> imageReference = [];
+  final storage = FirebaseStorage.instance;
+
+  Future<void> cadasterUser() async {
     try {
-      final storage = FirebaseStorage.instance;
-      final imageName = DateTime.now()
-          .millisecondsSinceEpoch
-          .toString(); // Nome único para a imagem
-      final Reference storageReference =
-          storage.ref().child('FotosUsuarios/$imageName.jpg');
-      final UploadTask uploadTask = storageReference.putFile(imageFile!);
+      firebaseImage = await fireBaseRepository
+          .uploadImageToFirebase(widget._cadasterController.profilePicture);
+      await repository.register(firebaseImage[0], widget._cadasterController);
 
-      // Aguarde o término do upload
-      await uploadTask.whenComplete(() => null);
-
-      // Recupere a URL da imagem no Firebase Storage
-      final imageUrl = await storageReference.getDownloadURL();
-
-      return imageUrl;
-    } catch (e) {
-      throw new Exception('');
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Cadastrado com Sucesso')));
+      Navigator.pushNamed(context, '/');
+    } on DioException catch (e) {
+      throw Exception(e.message);
     }
   }
 
@@ -72,7 +69,7 @@ class _LoginInfoPageState extends State<LoginInfoPage> {
                     ),
                     TextFormField(
                       decoration: const InputDecoration(labelText: 'Email'),
-                      controller: CadasterController.email,
+                      controller: widget._cadasterController.email,
                       validator: Validatorless.multiple([
                         Validatorless.required('Email é obrigatório'),
                         Validatorless.email('Digite um email válido')
@@ -84,7 +81,7 @@ class _LoginInfoPageState extends State<LoginInfoPage> {
                     TextFormField(
                       obscureText: true,
                       decoration: const InputDecoration(labelText: 'Senha'),
-                      controller: CadasterController.password,
+                      controller: widget._cadasterController.password,
                       validator: Validatorless.multiple([
                         Validatorless.required('Senha é obrigatório'),
                         Validatorless.min(
@@ -100,7 +97,8 @@ class _LoginInfoPageState extends State<LoginInfoPage> {
                           const InputDecoration(labelText: 'Confirmar senha'),
                       validator: Validatorless.multiple([
                         Validatorless.required('Confirmar senha é obrigatório'),
-                        Validatorless.compare(CadasterController.password,
+                        Validatorless.compare(
+                            widget._cadasterController.password,
                             'A senha deve ser igual')
                       ]),
                     ),
@@ -108,21 +106,39 @@ class _LoginInfoPageState extends State<LoginInfoPage> {
                       height: 30,
                     ),
                     Center(
-                      child: ElevatedButton(
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all<Color>(
-                              ColorsApp.i.primary),
-                        ),
-                        onPressed: () {
-                          final valid =
-                              _formKey.currentState?.validate() ?? false;
-                          if (valid) {
-                            CadasterUser();
-                          }
-                        },
-                        child: const Text('Próxima Página'),
-                      ),
-                    ),
+                      child: _isLoading
+                          ? const CircularProgressIndicator() // Ícone de carregamento
+                          : ElevatedButton(
+                              // Se não estiver carregando, mostre o botão
+                              style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        ColorsApp.i.primary),
+                              ),
+                              onPressed: () async {
+                                final valid =
+                                    _formKey.currentState?.validate() ?? false;
+                                if (valid) {
+                                  setState(() {
+                                    _isLoading = true; // Inicie o carregamento
+                                  });
+                                  try {
+                                    await cadasterUser();
+                                  } catch (e) {
+                                    fireBaseRepository.deleteImageToFirebase(
+                                      firebaseImage[1]!,
+                                    );
+                                  } finally {
+                                    setState(() {
+                                      _isLoading =
+                                          false; // Termine o carregamento
+                                    });
+                                  }
+                                }
+                              },
+                              child: const Text('Cadastrar'),
+                            ),
+                    )
                   ]),
             ),
           ),

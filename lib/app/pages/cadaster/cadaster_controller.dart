@@ -1,25 +1,29 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 
 class CadasterController {
-  static final TextEditingController firstName = TextEditingController();
-  static final TextEditingController lastName = TextEditingController();
-  static final TextEditingController age = TextEditingController();
-  static final TextEditingController telephone = TextEditingController();
+  TextEditingController firstName = TextEditingController();
+  TextEditingController lastName = TextEditingController();
+  TextEditingController age = TextEditingController();
+  TextEditingController telephone = TextEditingController();
+  TextEditingController postalCode = TextEditingController();
+  TextEditingController state = TextEditingController();
+  TextEditingController city = TextEditingController();
+  TextEditingController streetName = TextEditingController();
+  TextEditingController email = TextEditingController();
+  TextEditingController password = TextEditingController();
 
-  static final TextEditingController postalCode = TextEditingController();
-  static final TextEditingController state = TextEditingController();
-  static final TextEditingController city = TextEditingController();
-  static final TextEditingController streetName = TextEditingController();
+  File? profilePicture;
 
-  static final TextEditingController email = TextEditingController();
-  static final TextEditingController password = TextEditingController();
+  CadasterController();
 
-  static File? profilePicture = null;
+  // Singleton instance
+  static final CadasterController _instance = CadasterController._internal();
 
-  CadasterController._();
-  static void disposeAll() {
+
+  CadasterController._internal();
+
+  void disposeAll() {
     firstName.dispose();
     lastName.dispose();
     age.dispose();

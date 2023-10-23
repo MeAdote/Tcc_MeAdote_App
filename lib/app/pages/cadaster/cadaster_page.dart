@@ -18,9 +18,11 @@ class Cadaster extends StatefulWidget {
 class _Cadaster extends State<Cadaster> {
   @override
   void dispose() {
-    CadasterController.profilePicture = null;
+    _cadasterController.disposeAll();
     super.dispose();
   }
+
+  final CadasterController _cadasterController = CadasterController();
 
   final PageController _pageController = PageController();
   @override
@@ -38,9 +40,9 @@ class _Cadaster extends State<Cadaster> {
               });
             },
             children: [
-              PersonalInfoPage(_pageController),
-              AdressInfoPage(_pageController),
-              LoginInfoPage(_pageController),
+              PersonalInfoPage(_pageController, _cadasterController),
+              AdressInfoPage(_pageController, _cadasterController),
+              LoginInfoPage(_pageController, _cadasterController),
             ],
           ),
         ],

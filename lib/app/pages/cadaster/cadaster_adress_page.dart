@@ -7,8 +7,9 @@ import '../../ui/styles/colors_app.dart';
 
 class AdressInfoPage extends StatefulWidget {
   final PageController pageController;
+  final CadasterController _textFieldController;
 
-  const AdressInfoPage(this.pageController, {Key? key}) : super(key: key);
+  const AdressInfoPage(this.pageController, this._textFieldController, {Key? key}) : super(key: key);
 
   @override
   State<AdressInfoPage> createState() => _AdressInfoPageState();
@@ -16,7 +17,7 @@ class AdressInfoPage extends StatefulWidget {
 
 class _AdressInfoPageState extends State<AdressInfoPage> {
   final _formKey = GlobalKey<FormState>();
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,7 +39,7 @@ class _AdressInfoPageState extends State<AdressInfoPage> {
                   ),
                   TextFormField(
                     decoration: const InputDecoration(labelText: 'CEP'),
-                    controller: CadasterController.postalCode,
+                    controller: widget._textFieldController.postalCode,
                     validator: Validatorless.multiple([
                       Validatorless.required('CEP é obrigatório'),
                       Validatorless.max(
@@ -54,7 +55,7 @@ class _AdressInfoPageState extends State<AdressInfoPage> {
                     decoration: const InputDecoration(
                       labelText: 'Estado',
                     ),
-                    controller: CadasterController.state,
+                    controller: widget._textFieldController.state,
                     validator: Validatorless.required('Estado é obrigatório'),
                   ),
                   const SizedBox(
@@ -62,7 +63,7 @@ class _AdressInfoPageState extends State<AdressInfoPage> {
                   ),
                   TextFormField(
                     decoration: const InputDecoration(labelText: 'Cidade'),
-                    controller: CadasterController.city,
+                    controller: widget._textFieldController.city,
                     validator: Validatorless.required('Cidade é obrigatório'),
                   ),
                   const SizedBox(
@@ -70,7 +71,7 @@ class _AdressInfoPageState extends State<AdressInfoPage> {
                   ),
                   TextFormField(
                     decoration: const InputDecoration(labelText: 'Rua'),
-                    controller: CadasterController.streetName,
+                    controller: widget._textFieldController.streetName,
                     validator: Validatorless.required('Rua é Obrigatório'),
                   ),
                   const SizedBox(

@@ -17,13 +17,19 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      return web;
+      throw UnsupportedError(
+        'DefaultFirebaseOptions have not been configured for web - '
+        'you can reconfigure this by running the FlutterFire CLI again.',
+      );
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
         return android;
       case TargetPlatform.iOS:
-        return ios;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for ios - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.macOS:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for macos - '
@@ -46,30 +52,12 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyAqiuNEgjePkbylIdxTy-EJb6_fsUtzTPA',
-    appId: '1:714376242981:web:193987d67439e1f90f5ccc',
-    messagingSenderId: '714376242981',
-    projectId: 'tccmeadote-d53b4',
-    authDomain: 'tccmeadote-d53b4.firebaseapp.com',
-    storageBucket: 'tccmeadote-d53b4.appspot.com',
-    measurementId: 'G-V9PHTZ7DYW',
-  );
-
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyBqoOh9mNXfHVG0mu07gm-YfR-_fhq336I',
-    appId: '1:714376242981:android:d87685d7f5b4043c0f5ccc',
+    appId: '1:714376242981:android:256aba8541dae6b90f5ccc',
     messagingSenderId: '714376242981',
     projectId: 'tccmeadote-d53b4',
+    databaseURL: 'https://tccmeadote-d53b4-default-rtdb.firebaseio.com',
     storageBucket: 'tccmeadote-d53b4.appspot.com',
-  );
-
-  static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBf1vl3-74Yy0XYe0dDEmH4BLf_jbdyFvY',
-    appId: '1:714376242981:ios:6388411205c112180f5ccc',
-    messagingSenderId: '714376242981',
-    projectId: 'tccmeadote-d53b4',
-    storageBucket: 'tccmeadote-d53b4.appspot.com',
-    iosBundleId: 'com.example.tccMeAdote',
   );
 }
