@@ -5,7 +5,7 @@ import 'package:tcc_me_adote/app/pages/homePage/assets/widgets/iconAndText.dart'
 import 'package:tcc_me_adote/app/pages/homePage/assets/widgets/smallText.dart';
 
 class DogPageBody extends StatefulWidget {
-  const DogPageBody({super.key});
+  const DogPageBody({Key? key}) : super(key: key);
 
   @override
   State<DogPageBody> createState() => _DogPageBodyState();
@@ -13,16 +13,17 @@ class DogPageBody extends StatefulWidget {
 
 class _DogPageBodyState extends State<DogPageBody> {
   PageController pageController = PageController(viewportFraction: 0.85);
-  var _pagAtual = 0.0;
+  var _currPageValue = 0.0;
   double _scaleFactor = 0.8;
+  double _height = 220;
 
   @override
   void initState() {
     super.initState();
     pageController.addListener(() {
       setState(() {
-        _pagAtual = pageController.page!;
-        print("Pagina Atual " + _pagAtual.toString());
+        _currPageValue = pageController.page!;
+        print("Pagina Atual " + _currPageValue.toString());
       });
     });
   }
@@ -47,13 +48,27 @@ class _DogPageBodyState extends State<DogPageBody> {
 
   Widget _buildPageItem(int index) {
     Matrix4 matrix = new Matrix4.identity();
-    if (index == _pagAtual.floor()) {
-      var esqAtual = 1 - (_pagAtual - index) * (1 - _scaleFactor);
-      matrix = Matrix4.diagonal3Values(1, esqAtual, 1);
-    } else if (index == _pagAtual.floor() + 1) {
-      var esqAtual =
-          _scaleFactor + (_pagAtual - index + 1) * (1 - _scaleFactor);
-      matrix = Matrix4.diagonal3Values(1, esqAtual, 1);
+    if (index == _currPageValue.floor()) {
+      var currScale = 1 - (_currPageValue - index) * (1 - _scaleFactor);
+      var currTrans = _height * (1 - currScale) / 2;
+      matrix = Matrix4.diagonal3Values(1, currScale, 1)
+        ..setTranslationRaw(0, currTrans, 0);
+    } else if (index == _currPageValue.floor() + 1) {
+      var currScale =
+          _scaleFactor + (_currPageValue - index + 1) * (1 - _scaleFactor);
+      var currTrans = _height * (1 - currScale) / 2;
+      matrix = Matrix4.diagonal3Values(1, currScale, 1);
+      matrix = Matrix4.diagonal3Values(1, currScale, 1)
+        ..setTranslationRaw(0, currTrans, 0);
+    } else if (index == _currPageValue.floor() - 1) {
+      var currScale = 1 - (_currPageValue - index) * (1 - _scaleFactor);
+      matrix = Matrix4.diagonal3Values(1, currScale, 1);
+      matrix = Matrix4.diagonal3Values(1, currScale, 1)
+        ..setTranslationRaw(0, _scaleFactor, 0);
+    } else {
+      var currScale = 0.8;
+      matrix = Matrix4.diagonal3Values(1, currScale, 1)
+        ..setTranslationRaw(0, _height * (1 - _scaleFactor) / 2, 1);
     }
 
     return Transform(
@@ -76,9 +91,23 @@ class _DogPageBodyState extends State<DogPageBody> {
               height: 120,
               margin: EdgeInsets.only(left: 30, right: 30, bottom: 15),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(30),
-                color: Colors.white,
-              ),
+                  borderRadius: BorderRadius.circular(30),
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Color(0xFFe8e8e8),
+                      blurRadius: 5.0,
+                      offset: Offset(0, 5),
+                    ),
+                    BoxShadow(
+                      color: Colors.white,
+                      offset: Offset(-5, 0),
+                    ),
+                    BoxShadow(
+                      color: Colors.white,
+                      offset: Offset(5, 0),
+                    ),
+                  ]),
               child: Container(
                 padding: EdgeInsets.only(top: 15, left: 15, right: 15),
                 child: Column(
