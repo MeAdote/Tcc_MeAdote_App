@@ -9,7 +9,7 @@ import 'package:tcc_me_adote/app/models/create_user.dart';
 import 'package:tcc_me_adote/app/pages/cadaster/cadaster_controller.dart';
 
 class UserRepository {
-  final String url = "https://192.168.15.2:7288";
+  final String url = "https://localhost:5001";
   Dio dio = Dio();
   Future<void> register(String? imageUrl, CadasterController textController) async {
 

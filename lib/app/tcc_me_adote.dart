@@ -16,7 +16,7 @@ class TccMeAdote extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeConfig.theme,
       routes: {
-        '/': (context) => const Splash(),
+        '/': (context) => LoginPage(),
         '/cadaster' :(context) => Cadaster(),
         '/pets': (context) => const PetListPage(),
         '/login' : (context) =>  LoginPage(),

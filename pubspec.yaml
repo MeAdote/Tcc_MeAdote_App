@@ -41,6 +41,7 @@ dependencies:
   firebase_core: ^2.15.1
   firebase_storage: ^11.2.6
   validatorless: ^1.2.3
+  flutter_secure_storage: ^9.0.0
 
 dev_dependencies:
   flutter_test:
