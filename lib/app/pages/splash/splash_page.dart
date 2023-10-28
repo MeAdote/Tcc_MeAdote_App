@@ -5,15 +5,7 @@ class Splash extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Theme(
-      data: ThemeData(
-        scaffoldBackgroundColor: Colors.white,
-        appBarTheme: AppBarTheme(
-          backgroundColor: Colors.blue,
-          elevation: 0,
-        ),
-      ),
-      child: Scaffold(
+    return  Scaffold(
         body: LayoutBuilder(
           builder: (BuildContext context, BoxConstraints constraints) {
             return Center(
@@ -51,9 +43,9 @@ class Splash extends StatelessWidget {
                     margin: EdgeInsets.only(top: constraints.maxHeight * 0.04),
                     child: ElevatedButton(
                       onPressed: () {
-                        Navigator.pushNamed(context, '/pets');
+                        Navigator.pushNamed(context, '/cadaster');
                       },
-                      child: Text('Acessar'),
+                      child: Text('Cadastrar'),
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all(Colors.blue),
                         minimumSize: MaterialStateProperty.all(Size(230, 50)),
@@ -63,7 +55,7 @@ class Splash extends StatelessWidget {
                   SizedBox(height: constraints.maxHeight * 0.02),
                   InkWell(
                     onTap: () {
-                      Navigator.pushNamed(context, '/rotaLogin');
+                      Navigator.pushNamed(context, '/login');
                     },
                     child: Text('Já tem uma conta?'),
                   ),
@@ -72,7 +64,6 @@ class Splash extends StatelessWidget {
             );
           },
         ),
-      ),
-    );
+      );
   }
 }
