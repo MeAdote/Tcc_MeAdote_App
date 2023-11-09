@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tcc_me_adote/app/pages/cadaster/cadaster_page.dart';
 import 'package:tcc_me_adote/app/pages/login/login_page.dart';
+import 'package:tcc_me_adote/app/pages/pet_info/pet_info.dart';
 import 'package:tcc_me_adote/app/pages/pets/list_pet_page.dart';
 import 'package:tcc_me_adote/app/ui/theme/theme_config.dart';
 

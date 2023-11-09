@@ -23,4 +23,21 @@ class PetRepository {
       throw Exception("Erro ao buscar os pets: $e");
     }
   }
+
+  Future<PetModel> getPetById(int id) async{
+    try {
+      final response = await dio.get('${url}Pet/$id');
+      if(response.statusCode == 200){
+      final Map<String, dynamic> jsonData = response.data;
+      final pet = PetModel.fromJson(jsonData);
+
+      return pet;
+    }
+    else{
+      throw Exception('Erro ao retornar pet por ID');
+    }
+    } catch (e) {
+      throw Exception('Erro ao retornar o pet por ID');
+    }    
+  }
 }

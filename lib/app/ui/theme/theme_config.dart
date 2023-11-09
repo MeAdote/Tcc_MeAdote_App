@@ -9,6 +9,18 @@ class ThemeConfig {
     borderSide: BorderSide(color: Colors.grey[400]!)
   );
 
+  static final customAppBar = AppBar(
+    title: Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Image.asset('assets/images/logo.png', width: 32,),
+      ],
+      
+    ),
+    centerTitle: true,
+  );
+
   static final theme = ThemeData(
     scaffoldBackgroundColor: Colors.white,
     appBarTheme: const AppBarTheme(
