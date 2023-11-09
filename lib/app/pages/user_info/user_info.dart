@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:tcc_me_adote/app/ui/theme/theme_config.dart';
 
 class UserInfo extends StatefulWidget {
-  const UserInfo({super.key, required this.petId});
+  const UserInfo({super.key, required this.userid});
 
-  final int? petId;
+  final int? userid;
   @override
   State<UserInfo> createState() => _UserInfoState();
 }
@@ -16,7 +16,9 @@ class _UserInfoState extends State<UserInfo> {
       appBar: ThemeConfig.customAppBar,
       body: const Column(
         children: [
-           Text('Bem vindo a tela de doador')
+           Text('Bem vindo a tela de doador {widget.userid}' )
+          
+
         ],
       ),
     );

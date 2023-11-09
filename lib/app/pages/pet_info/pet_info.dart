@@ -19,6 +19,8 @@ class _PetInfoState extends State<PetInfo> {
 
   PetRepository repository = PetRepository();
 
+  String? userId;
+
   @override
   void initState() {
     super.initState();
@@ -28,8 +30,7 @@ class _PetInfoState extends State<PetInfo> {
   Future<PetModel> returnPet() async {
     try {
       final pet = await repository.getPetById(widget.pet.id!);
-      return pet;
-    } catch (e) {
+      return pet;    } catch (e) {
       throw Exception('Erro ao carregar dados do pet');
     }
   }
@@ -91,8 +92,9 @@ class _PetInfoState extends State<PetInfo> {
                       ),
                       InkWell(
                         onTap: () {
+                          userId = pet.idUser as String?;
                             Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => const UserInfo()));
+                                builder: (context) => UserInfo(userid: pet.idUser)));
                           },
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
