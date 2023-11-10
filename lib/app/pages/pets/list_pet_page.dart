@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:tcc_me_adote/app/models/pet_model.dart';
 import 'package:tcc_me_adote/app/pages/pet_info/pet_info.dart';
 
-import '../../repositories/pet_repository.dart';
-
 class PetListPage extends StatefulWidget {
   const PetListPage({super.key});
 
@@ -12,28 +10,29 @@ class PetListPage extends StatefulWidget {
 }
 
 class _PetListPageState extends State<PetListPage> {
-  final PetRepository repository = PetRepository();
-  List<PetModel>? petData;
-  bool isLoading = true; // Variável para controlar o estado de carregamento
+  List<PetModel> mockPetData = [
+    PetModel(
+      name: 'Pet 1',
+      age: '2 anos',
+      race: 'Raça 1',
+      location: 'Localização 1',
+      petPicture: 'https://firebasestorage.googleapis.com/v0/b/tccmeadote-d53b4.appspot.com/o/FotosPets%2FFotoCachorro1.jpeg?alt=media&token=56097a02-70bc-49e4-8677-cfed055108e3',
+    ),
+    PetModel(
+      name: 'Pet 2',
+      age: '1 ano',
+      race: 'Raça 2',
+      location: 'Localização 2',
+      petPicture: 'https://firebasestorage.googleapis.com/v0/b/tccmeadote-d53b4.appspot.com/o/FotosPets%2FFotoGato2.jpeg?alt=media&token=733d7d81-5e02-4d32-a109-b228ad7699f2',
+    ),
+    // Adicione mais itens conforme necessário.
+  ];
+
+  bool isLoading = false;
 
   @override
   void initState() {
     super.initState();
-    fetchData();
-  }
-
-  Future<void> fetchData() async {
-    try {
-      var data = await repository.getPets();
-      setState(() {
-        petData = data.cast<PetModel>();
-        isLoading = false; // Marca o carregamento como concluído
-      });
-    } catch (e) {
-      // Alterei 'E' para 'e'
-      print("Erro ao buscar os pets: $e");
-      isLoading = false; // Marca o carregamento como concluído em caso de erro
-    }
   }
 
   @override
@@ -43,12 +42,10 @@ class _PetListPageState extends State<PetListPage> {
       body: Padding(
         padding: const EdgeInsets.fromLTRB(20, 47, 20, 0),
         child: Column(
-          crossAxisAlignment:
-              CrossAxisAlignment.start, // Alinhe o conteúdo à esquerda
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Align(
-              alignment: Alignment
-                  .topRight, // Alinhe o botão no canto superior direito
+              alignment: Alignment.topRight,
               child: Container(
                 decoration: const BoxDecoration(
                   shape: BoxShape.circle,
@@ -58,7 +55,7 @@ class _PetListPageState extends State<PetListPage> {
                   onPressed: () => {},
                   icon: const Icon(
                     Icons.person_2,
-                    color: Colors.white, // Defina a cor do ícone como branca
+                    color: Colors.white,
                   ),
                 ),
               ),
@@ -91,11 +88,10 @@ class _PetListPageState extends State<PetListPage> {
                 Container(
                   decoration: BoxDecoration(
                     border: Border.all(
-                      color: const Color(0xFF949494), // Cor da borda (preta)
-                      width: 2.0, // Espessura da borda
+                      color: const Color(0xFF949494),
+                      width: 2.0,
                     ),
-                    borderRadius:
-                        BorderRadius.circular(10), // Curvatura da borda
+                    borderRadius: BorderRadius.circular(10),
                   ),
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(12, 4, 12, 4),
@@ -160,16 +156,14 @@ class _PetListPageState extends State<PetListPage> {
             ),
             const SizedBox(height: 10,),
             isLoading
-                ?
-                 const Center(
-                    child:
-                        CircularProgressIndicator(),
+                ? const Center(
+                    child: CircularProgressIndicator(),
                   )
                 : Expanded(
                     child: ListView.builder(
-                      itemCount: petData?.length ?? 0,
+                      itemCount: mockPetData.length,
                       itemBuilder: (context, index) {
-                        PetModel pets = petData![index];
+                        PetModel pets = mockPetData[index];
                         return InkWell(
                           onTap: () {
                             Navigator.of(context).push(MaterialPageRoute(
@@ -177,12 +171,12 @@ class _PetListPageState extends State<PetListPage> {
                           },
                           child: Container(
                             decoration: BoxDecoration(
-                                border: Border.all(
-                                    color: Colors.white), // Cor da borda
-                                borderRadius: BorderRadius.circular(
-                                    10.0),
-                                color: Colors.white
-                                ),
+                              border: Border.all(
+                                color: Colors.white,
+                              ),
+                              borderRadius: BorderRadius.circular(10.0),
+                              color: Colors.white,
+                            ),
                             margin: const EdgeInsets.only(bottom: 20.0),
                             child: Padding(
                               padding: const EdgeInsets.all(7.0),
@@ -199,8 +193,7 @@ class _PetListPageState extends State<PetListPage> {
                                     width: 12,
                                   ),
                                   Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         pets.name!,
@@ -223,8 +216,7 @@ class _PetListPageState extends State<PetListPage> {
                                         height: 3,
                                       ),
                                       Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
+                                        crossAxisAlignment: CrossAxisAlignment.center,
                                         children: [
                                           const Icon(
                                             Icons.location_on_outlined,
