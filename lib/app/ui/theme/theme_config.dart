@@ -10,6 +10,7 @@ class ThemeConfig {
   );
 
   static final customAppBar = AppBar(
+    automaticallyImplyLeading: false,
     title: Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,

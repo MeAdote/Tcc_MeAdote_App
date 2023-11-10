@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:dio/dio.dart';
@@ -6,13 +7,14 @@ import 'package:flutter/src/widgets/editable_text.dart';
 import 'package:tcc_me_adote/app/core/exceptions/unauthorized_exceptions.dart';
 import 'package:tcc_me_adote/app/models/auth_model.dart';
 import 'package:tcc_me_adote/app/models/create_user.dart';
+import 'package:tcc_me_adote/app/models/read_user_model.dart';
 import 'package:tcc_me_adote/app/pages/cadaster/cadaster_controller.dart';
 
 class UserRepository {
-  final String url = "https://localhost:5001";
+  final String url = "https://192.168.15.2:7288/User";
   Dio dio = Dio();
-  Future<void> register(String? imageUrl, CadasterController textController) async {
-
+  Future<void> register(
+      String? imageUrl, CadasterController textController) async {
     CreateUser user = CreateUser(
         user: User(
           firstName: textController.firstName.text,
@@ -30,27 +32,46 @@ class UserRepository {
         userLogin: UserLogin(
             email: textController.email.text,
             password: textController.password.text));
-    try{
-      await dio.post("$url/User/cadaster", data: user.toJson());
-    }
-     on DioException catch(e){
-      if(e.response?.statusCode == 409){
+    try {
+      await dio.post("$url/cadaster", data: user.toJson());
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 409) {
         throw Exception('Email já cadastrado');
       }
     }
   }
-  Future<AuthModel> login(String email, String password) async{
+
+  Future<AuthModel> login(String email, String password) async {
     try {
-      final result = await dio.post(url + '/User/Authenticate', data: {
-        'email' : email,
-        'password': password
-      });
+      final result = await dio.post('$url/Authenticate',
+          data: {'email': email, 'password': password});
       return AuthModel.fromMap(result.data);
-    } on DioException catch (e, s) { 
-      if(e.response?.statusCode == 403){
+    } on DioException catch (e, s) {
+      if (e.response?.statusCode == 403) {
         throw UnauthorizedException();
       }
       throw Exception('Erro ao realizar login');
+    }
+  }
+
+  Future<ReadUserModel> getUserById(int idUser) async {
+    try {
+      final Response response = await dio.get('$url/userpet/$idUser');
+
+      if (response.statusCode == 200) {
+
+        Map<String, dynamic> jsonData = json.decode(response.toString());
+
+        ReadUserModel readUser = ReadUserModel.fromJson(jsonData);
+
+        return readUser;
+      } else {
+        throw Exception('Falha ao obter usuário');
+        
+      }
+    } catch (error) {
+      print('Erro ao obter usuário: $error');
+      throw Exception('Erro ao obter usuário');
     }
   }
 }

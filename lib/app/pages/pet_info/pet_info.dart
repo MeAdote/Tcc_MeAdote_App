@@ -19,8 +19,6 @@ class _PetInfoState extends State<PetInfo> {
 
   PetRepository repository = PetRepository();
 
-  String? userId;
-
   @override
   void initState() {
     super.initState();
@@ -92,7 +90,6 @@ class _PetInfoState extends State<PetInfo> {
                       ),
                       InkWell(
                         onTap: () {
-                          userId = pet.idUser as String?;
                             Navigator.of(context).push(MaterialPageRoute(
                                 builder: (context) => UserInfo(userid: pet.idUser)));
                           },
