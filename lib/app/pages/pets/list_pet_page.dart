@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tcc_me_adote/app/models/pet_model.dart';
-import 'package:tcc_me_adote/app/pages/pet_info/pet_info.dart';
+import 'package:tcc_me_adote/app/pages/pets/pet_info.dart';
+import 'package:tcc_me_adote/app/pages/user_info/user_logged.dart';
 
 import '../../repositories/pet_repository.dart';
 
@@ -55,7 +56,9 @@ class _PetListPageState extends State<PetListPage> {
                   color: Colors.blue,
                 ),
                 child: IconButton(
-                  onPressed: () => {},
+                  onPressed: () => {
+                    Navigator.pushNamed(context, '/userlogged')
+                  },
                   icon: const Icon(
                     Icons.person_2,
                     color: Colors.white, // Defina a cor do ícone como branca

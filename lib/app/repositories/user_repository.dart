@@ -10,6 +10,8 @@ import 'package:tcc_me_adote/app/models/create_user.dart';
 import 'package:tcc_me_adote/app/models/read_user_model.dart';
 import 'package:tcc_me_adote/app/pages/cadaster/cadaster_controller.dart';
 
+import '../utils/secure_storage_util.dart';
+
 class UserRepository {
   final String url = "https://192.168.15.2:7288/User";
   Dio dio = Dio();
@@ -56,7 +58,9 @@ class UserRepository {
 
   Future<ReadUserModel> getUserById(int idUser) async {
     try {
-      final Response response = await dio.get('$url/userpet/$idUser');
+      final String? token = await SecureStorageUtil().readToken('token');
+      final Response response = await dio.get('$url/userpet/$idUser',
+      options: Options(headers: {'Authorization' : 'Bearer $token'}));
 
       if (response.statusCode == 200) {
 
@@ -72,6 +76,29 @@ class UserRepository {
     } catch (error) {
       print('Erro ao obter usuário: $error');
       throw Exception('Erro ao obter usuário');
+    }
+  }
+
+
+
+  Future<ReadUserModel> getUserLogged() async{
+    try {
+      final String? token = await SecureStorageUtil().readToken('token');
+      final Response response = await dio.get('$url/userLogged',
+      options: Options(headers: {'Authorization' : 'Bearer $token'}));
+      if(response.statusCode == 200){
+        Map<String, dynamic> jsonData = json.decode(response.toString());
+
+        ReadUserModel readUser = ReadUserModel.fromJson(jsonData);
+        return readUser;
+      }
+
+      else{
+        throw Exception('Erro ao retornar usuário');
+      }
+
+    } catch (e) {
+      throw Exception('Erro ao retornar usuário');
     }
   }
 }

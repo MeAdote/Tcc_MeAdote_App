@@ -62,18 +62,35 @@ class _UserInfoState extends State<UserInfo> {
         future: userFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator();
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
           } else if (snapshot.hasError) {
-            return Text('Erro ao carregar dados do usuário');
+            return const Text('Erro ao carregar dados do usuário');
           } else {
             ReadUserModel user = snapshot.data!;
             return Center(
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Image.network(
-                      user.userPicture!,
-                      width: 100,
+                    Container(
+                      width: 130,
+                      height: 130,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: Colors.black, // Cor da borda
+                          width: 2.0, // Largura da borda
+                        ),
+                      ),
+                      child: ClipOval(
+                        child: Image.network(
+                          user.userPicture!,
+                          width: 80,
+                          fit: BoxFit
+                              .cover, // Ajuste a imagem para cobrir completamente o espaço disponível
+                        ),
+                      ),
                     ),
                     const SizedBox(
                       height: 18,
@@ -96,37 +113,41 @@ class _UserInfoState extends State<UserInfo> {
                         ),
                         const Icon(Icons.local_phone_outlined),
                         Text(telefoneFormatado),
-                        
                       ],
                     ),
-                  const SizedBox(height: 5,),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text('Email: ', style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14
-                      ),),
-                      const Icon(Icons.email_outlined),
-                      Text(user.email!)
-                    ],
-                  ),
-                  const SizedBox(height: 100,),
-                  const Padding(padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                    child: Row(
-                    children: [
-                       Text('Postagens: ', style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold
-                       ),)
-                    ],
-                  ),
-                  ), 
-
-                  const SizedBox(height: 30,),
-                  
-
-                    
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text(
+                          'Email: ',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 14),
+                        ),
+                        const Icon(Icons.email_outlined),
+                        Text(user.email!)
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 100,
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                      child: Row(
+                        children: [
+                          Text(
+                            'Postagens: ',
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
+                          )
+                        ],
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 30,
+                    ),
                     if (user.petUsersDto != null &&
                         user.petUsersDto!.isNotEmpty)
                       GridView.builder(
@@ -142,12 +163,14 @@ class _UserInfoState extends State<UserInfo> {
                           itemBuilder: (BuildContext context, int index) {
                             var pet = user.petUsersDto![index];
                             return Column(children: [
-                              Image.network(pet.petPicture!,
-                              width: 150,),
+                              Image.network(
+                                pet.petPicture!,
+                                width: 150,
+                              ),
                               Text(pet.name!),
                             ]);
                           })
-                    else 
+                    else
                       const Text('Usuário não possui postagens')
                   ]),
             );
